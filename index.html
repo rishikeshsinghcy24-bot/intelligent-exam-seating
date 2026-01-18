@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intelligent Exam Seating System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>Intelligent Exam Seating System</h1>
+            <p>Constraint-Based Seating with Integrity Management</p>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="nav-tabs">
+            <button class="tab-btn active" onclick="switchTab('dashboard')">Dashboard</button>
+            <button class="tab-btn" onclick="switchTab('students')">Students</button>
+            <button class="tab-btn" onclick="switchTab('halls')">Exam Halls</button>
+            <button class="tab-btn" onclick="switchTab('seating')">Seating Arrangement</button>
+        </nav>
+
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="tab-content active">
+            <div class="stats-grid">
+                <div class="stat-card blue">
+                    <div class="stat-info">
+                        <p class="stat-label">Total Students</p>
+                        <p class="stat-value" id="totalStudents">0</p>
+                    </div>
+                    <div class="stat-icon">👥</div>
+                </div>
+                
+                <div class="stat-card green">
+                    <div class="stat-info">
+                        <p class="stat-label">Low Risk</p>
+                        <p class="stat-value" id="lowRisk">0</p>
+                    </div>
+                    <div class="stat-icon">✓</div>
+                </div>
+                
+                <div class="stat-card yellow">
+                    <div class="stat-info">
+                        <p class="stat-label">Medium Risk</p>
+                        <p class="stat-value" id="mediumRisk">0</p>
+                    </div>
+                    <div class="stat-icon">⚠</div>
+                </div>
+                
+                <div class="stat-card red">
+                    <div class="stat-info">
+                        <p class="stat-label">High Risk</p>
+                        <p class="stat-value" id="highRisk">0</p>
+                    </div>
+                    <div class="stat-icon">✗</div>
+                </div>
+            </div>
+
+            <div class="forms-grid">
+                <!-- Add Student Form -->
+                <div class="form-card">
+                    <h3>Add Student</h3>
+                    <form id="studentForm">
+                        <input type="text" id="studentName" placeholder="Student Name" required>
+                        <input type="text" id="rollNo" placeholder="Roll Number" required>
+                        <select id="subject" required>
+                            <option value="">Select Subject</option>
+                            <option value="Mathematics">Mathematics</option>
+                            <option value="Physics">Physics</option>
+                            <option value="Chemistry">Chemistry</option>
+                            <option value="Biology">Biology</option>
+                            <option value="Computer Science">Computer Science</option>
+                            <option value="English">English</option>
+                        </select>
+                        <button type="submit" class="btn btn-primary">Add Student</button>
+                    </form>
+                </div>
+
+                <!-- Add Hall Form -->
+                <div class="form-card">
+                    <h3>Add Exam Hall</h3>
+                    <form id="hallForm">
+                        <input type="text" id="hallName" placeholder="Hall Name" required>
+                        <input type="number" id="hallRows" placeholder="Rows" min="3" max="15" value="6" required>
+                        <input type="number" id="hallCols" placeholder="Columns" min="3" max="15" value="8" required>
+                        <button type="submit" class="btn btn-success">Add Hall</button>
+                    </form>
+                    <p class="hall-count">Total Halls: <span id="hallCount">0</span></p>
+                </div>
+            </div>
+
+            <button id="generateBtn" class="btn btn-generate" onclick="generateSeating()">
+                Generate Seating Arrangement
+            </button>
+        </div>
+
+        <!-- Students Tab -->
+        <div id="students" class="tab-content">
+            <div class="table-container">
+                <table id="studentsTable">
+                    <thead>
+                        <tr>
+                            <th>Roll No</th>
+                            <th>Name</th>
+                            <th>Subject</th>
+                            <th>Credibility</th>
+                            <th>Risk Level</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentsTableBody">
+                        <tr>
+                            <td colspan="6" class="no-data">No students added yet</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Halls Tab -->
+        <div id="halls" class="tab-content">
+            <div id="hallsList" class="halls-list">
+                <p class="no-data">No halls added yet</p>
+            </div>
+        </div>
+
+        <!-- Seating Arrangement Tab -->
+        <div id="seating" class="tab-content">
+            <div id="seatingDisplay" class="seating-display">
+                <p class="no-data">No seating arrangement generated yet. Go to Dashboard and click "Generate Seating Arrangement"</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Violation Modal -->
+    <div id="violationModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeViolationModal()">&times;</span>
+            <h3>Add Violation</h3>
+            <div id="violationStudentInfo"></div>
+            <select id="violationType">
+                <option value="">Select Violation Type</option>
+                <option value="Peeking">Peeking (-5 points)</option>
+                <option value="Communication">Communication (-10 points)</option>
+                <option value="Copying">Copying (-15 points)</option>
+                <option value="Unauthorized Material">Unauthorized Material (-20 points)</option>
+            </select>
+            <button class="btn btn-primary" onclick="submitViolation()">Add Violation</button>
+        </div>
+    </div>
+
+    <script src="api.js"></script>
+</body>
+</html>
